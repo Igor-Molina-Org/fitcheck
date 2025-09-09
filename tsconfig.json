@@ -9,7 +9,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true, // <-- ignora checagem em node_modules
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
     /* Saída */
