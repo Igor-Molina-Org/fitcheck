@@ -2,6 +2,7 @@ import * as poseDetection from "@tensorflow-models/pose-detection";
 import * as tf from "@tensorflow/tfjs";
 import { useEffect, useRef } from "react";
 import { ExerciseInfo } from "../../utils/ExerciseInfo";
+import styles from "./styles.module.css";
 
 type ComputerVisionProps = {
   exerciseInfo: ExerciseInfo;
@@ -17,8 +18,8 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
 
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
-        width: { ideal: 1600 },
-        height: { ideal: 900 },
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
         frameRate: { ideal: 30 },
       },
     });
@@ -42,6 +43,9 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
     if (canvasRef.current && videoRef.current) {
       canvasRef.current.width = videoRef.current.videoWidth;
       canvasRef.current.height = videoRef.current.videoHeight;
+
+      canvasRef.current.style.display = "block";
+      canvasRef.current.style.overflow = "hidden";
     }
 
     if (!detectorRef.current) {
@@ -198,33 +202,35 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
   }, []); // <- monta só uma vez
 
   return (
-    <>
-      <div
-        style={{
-          position: "relative",
-          width: "fit-content",
-          height: "fit-content",
-        }}
-      >
-        <canvas
-          ref={canvasRef}
-          style={{ position: "absolute", top: 0, left: 0, zIndex: 2 }}
-        />
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          style={{ display: "block" }}
-        />
-      </div>
-      <h1 style={{ marginTop: "10px" }}>
-        {exerciseInfo.description
-          ? exerciseInfo.description
-          : "No description available for this exercise"}
-      </h1>
-    </>
-  );
+  <>
+    <h2 style={{
+      marginTop: "10px",
+      margin: "0px",
+      width: "200px"
+     }}>
+      {exerciseInfo.description
+        ? exerciseInfo.description
+        : "No description available for this exercise"}
+    </h2>
+
+    <div
+      className={styles.cameraContainer}
+    >
+      <canvas
+        ref={canvasRef}
+        className={styles.canvas}
+      />
+
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        playsInline
+        className={styles.video}
+      />
+    </div>
+  </>
+);
 }
 
 export default ComputerVision;
