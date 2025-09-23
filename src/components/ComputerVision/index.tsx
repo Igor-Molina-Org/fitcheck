@@ -17,8 +17,8 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
 
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
-        width: { ideal: 480 },
-        height: { ideal: 360 },
+        width: { ideal: 1600 },
+        height: { ideal: 900 },
         frameRate: { ideal: 30 },
       },
     });
@@ -55,6 +55,25 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       );
     }
   };
+
+  function calculateAngle(a: poseDetection.Keypoint, b: poseDetection.Keypoint, c: poseDetection.Keypoint): number {
+  //Getting Line from points
+  const ab = { x: a.x - b.x, y: a.y - b.y };
+  const cb = { x: c.x - b.x, y: c.y - b.y };
+
+  //Dot Product from lines
+  const dot = ab.x * cb.x + ab.y * cb.y;
+
+  //Getting line length
+  const lengthAB = Math.sqrt(ab.x ** 2 + ab.y ** 2);
+  const lengthCB = Math.sqrt(cb.x ** 2 + cb.y ** 2);
+
+  const cosineAngle = dot / (lengthAB * lengthCB);
+  let angle = Math.acos(cosineAngle) * (180 / Math.PI);
+
+  return angle;
+  }
+
 
   const detectPose = async () => {
     const detector = detectorRef.current;
@@ -97,10 +116,27 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
     ctx.save();
 
     const lineWidth = 2;
-    const lineColor = "lime";
     const pointRadius = 4;
-    const pointColor = "red";
+    const correctColor = "lime";
+    const wrongColor = "red";
+    
+    const incorrectSegments = new Set<string>();
 
+    if(exerciseInfo.angleChecks){
+      exerciseInfo.angleChecks.forEach((check) => {
+      const [a, b, c] = check.points.map((pointName) => keypoints.find((kp) => kp.name === pointName));
+      
+      if (a && b && c) {
+        const angle = calculateAngle(a, b, c);
+        console.log(angle)
+        if (angle < check.minAngle || angle > check.maxAngle) {
+          check.points.forEach(p => incorrectSegments.add(p));
+          
+        }
+      }
+    });
+    }
+    
     // desenha linhas
     skeleton.forEach(([startName, endName]) => {
       const start = keypoints.find((kp) => kp.name === startName);
@@ -109,11 +145,17 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       if (!start || !end) return;
       if ((start.score ?? 0) < 0.5 || (end.score ?? 0) < 0.5) return;
 
+      // Cor padrão
+      let color =
+        incorrectSegments.has(endName) && incorrectSegments.has(startName)
+          ? wrongColor
+          : correctColor;
+
       ctx.beginPath();
       ctx.moveTo(start.x, start.y);
       ctx.lineTo(end.x, end.y);
       ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = lineColor;
+      ctx.strokeStyle = color;
       ctx.stroke();
     });
 
@@ -123,9 +165,13 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       if (!keypointNames.has(kp.name)) return;
       if ((kp.score ?? 0) < 0.5) return;
 
+      // Define a cor padrão
+      let color = incorrectSegments.has(kp.name) ? wrongColor : correctColor;
+
+      // Desenha cada ponto separadamente
       ctx.beginPath();
       ctx.arc(kp.x, kp.y, pointRadius, 0, 2 * Math.PI);
-      ctx.fillStyle = pointColor;
+      ctx.fillStyle = color;
       ctx.fill();
     });
 

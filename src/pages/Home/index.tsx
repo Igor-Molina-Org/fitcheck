@@ -1,11 +1,11 @@
 import ComputerVision from "../../components/ComputerVision";
-import { fullBodyInfo } from "../../utils/exerciseSkeletons/fullBodySkeleton";
+import { barbellBicepsCurlInfo } from "../../utils/exerciseSkeletons/muscularGroups/arms/barbellBicepsCurl";
 
 export function Home() {
   return (
     <>
       <h1>Home!</h1>
-      <ComputerVision exerciseInfo={fullBodyInfo} />
+      <ComputerVision exerciseInfo={barbellBicepsCurlInfo} />
     </>
   );
 }

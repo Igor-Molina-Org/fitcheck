@@ -25,6 +25,7 @@ export const fullBodyInfo: ExerciseInfo = {
     ["right_ankle", "right_foot_index"],
   ],
   description: "Full body tracking",
+  angleChecks: []
 };
 
 export const fullBodySkeleton: Array<[string, string]> = [];
