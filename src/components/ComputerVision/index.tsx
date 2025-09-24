@@ -202,7 +202,8 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
         detectorRef.current = null;
       }
     };
-  }, []); // <- monta só uma vez
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // mounts component only once
 
   return (
     <>
