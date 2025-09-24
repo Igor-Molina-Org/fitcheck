@@ -25,82 +25,82 @@ export declare const POSE_CONNECTIONS: LandmarkConnectionArray;
  * while still allowing optimization for internal linkages.
  */
 export declare const POSE_LANDMARKS: {
-  NOSE: number,
-  RIGHT_EYE_INNER: number,
-  RIGHT_EYE: number,
-  RIGHT_EYE_OUTER: number,
-  LEFT_EYE_INNER: number,
-  LEFT_EYE: number,
-  LEFT_EYE_OUTER: number,
-  RIGHT_EAR: number,
-  LEFT_EAR: number,
-  MOUTH_RIGHT: number,
-  MOUTH_LEFT: number,
-  RIGHT_SHOULDER: number,
-  LEFT_SHOULDER: number,
-  RIGHT_ELBOW: number,
-  LEFT_ELBOW: number,
-  RIGHT_WRIST: number,
-  LEFT_WRIST: number,
-  RIGHT_PINKY: number,
-  LEFT_PINKY: number,
-  RIGHT_INDEX: number,
-  LEFT_INDEX: number,
-  RIGHT_THUMB: number,
-  LEFT_THUMB: number,
-  RIGHT_HIP: number,
-  LEFT_HIP: number
+  NOSE: number;
+  RIGHT_EYE_INNER: number;
+  RIGHT_EYE: number;
+  RIGHT_EYE_OUTER: number;
+  LEFT_EYE_INNER: number;
+  LEFT_EYE: number;
+  LEFT_EYE_OUTER: number;
+  RIGHT_EAR: number;
+  LEFT_EAR: number;
+  MOUTH_RIGHT: number;
+  MOUTH_LEFT: number;
+  RIGHT_SHOULDER: number;
+  LEFT_SHOULDER: number;
+  RIGHT_ELBOW: number;
+  LEFT_ELBOW: number;
+  RIGHT_WRIST: number;
+  LEFT_WRIST: number;
+  RIGHT_PINKY: number;
+  LEFT_PINKY: number;
+  RIGHT_INDEX: number;
+  LEFT_INDEX: number;
+  RIGHT_THUMB: number;
+  LEFT_THUMB: number;
+  RIGHT_HIP: number;
+  LEFT_HIP: number;
 };
 
 /**
  * Just the left-side landmarks for pose.
  */
 export declare const POSE_LANDMARKS_LEFT: {
-  LEFT_EYE_INNER: number,
-  LEFT_EYE: number,
-  LEFT_EYE_OUTER: number,
-  LEFT_EAR: number,
-  LEFT_RIGHT: number,
-  LEFT_SHOULDER: number,
-  LEFT_ELBOW: number,
-  LEFT_WRIST: number,
-  LEFT_PINKY: number,
-  LEFT_INDEX: number,
-  LEFT_THUMB: number,
-  LEFT_HIP: number,
-  LEFT_KNEE: number,
-  LEFT_ANKLE: number,
-  LEFT_HEEL: number,
-  LEFT_FOOT_INDEX: number,
+  LEFT_EYE_INNER: number;
+  LEFT_EYE: number;
+  LEFT_EYE_OUTER: number;
+  LEFT_EAR: number;
+  LEFT_RIGHT: number;
+  LEFT_SHOULDER: number;
+  LEFT_ELBOW: number;
+  LEFT_WRIST: number;
+  LEFT_PINKY: number;
+  LEFT_INDEX: number;
+  LEFT_THUMB: number;
+  LEFT_HIP: number;
+  LEFT_KNEE: number;
+  LEFT_ANKLE: number;
+  LEFT_HEEL: number;
+  LEFT_FOOT_INDEX: number;
 };
 
 /**
  * Just the right-side landmarks for pose.
  */
 export declare const POSE_LANDMARKS_RIGHT: {
-  RIGHT_EYE_INNER: number,
-  RIGHT_EYE: number,
-  RIGHT_EYE_OUTER: number,
-  RIGHT_EAR: number,
-  RIGHT_LEFT: number,
-  RIGHT_SHOULDER: number,
-  RIGHT_ELBOW: number,
-  RIGHT_WRIST: number,
-  RIGHT_PINKY: number,
-  RIGHT_INDEX: number,
-  RIGHT_THUMB: number,
-  RIGHT_HIP: number,
-  RIGHT_KNEE: number,
-  RIGHT_ANKLE: number,
-  RIGHT_HEEL: number,
-  RIGHT_FOOT_INDEX: number
+  RIGHT_EYE_INNER: number;
+  RIGHT_EYE: number;
+  RIGHT_EYE_OUTER: number;
+  RIGHT_EAR: number;
+  RIGHT_LEFT: number;
+  RIGHT_SHOULDER: number;
+  RIGHT_ELBOW: number;
+  RIGHT_WRIST: number;
+  RIGHT_PINKY: number;
+  RIGHT_INDEX: number;
+  RIGHT_THUMB: number;
+  RIGHT_HIP: number;
+  RIGHT_KNEE: number;
+  RIGHT_ANKLE: number;
+  RIGHT_HEEL: number;
+  RIGHT_FOOT_INDEX: number;
 };
 
 /**
  * Just the neutral landmarks for pose.
  */
 export declare const POSE_LANDMARKS_NEUTRAL: {
-  NOSE: number,
+  NOSE: number;
 };
 
 /**
@@ -131,7 +131,10 @@ export type LandmarkList = Landmark[];
 /**
  * We support several ways to get image inputs.
  */
-export type InputImage = HTMLVideoElement | HTMLImageElement | HTMLCanvasElement;
+export type InputImage =
+  | HTMLVideoElement
+  | HTMLImageElement
+  | HTMLCanvasElement;
 
 /**
  * Legal inputs.
@@ -143,7 +146,7 @@ export interface InputMap {
 /**
  * GpuBuffers should all be compatible with Canvas' `drawImage`
  */
-type GpuBuffer = HTMLCanvasElement|HTMLImageElement|ImageBitmap;
+type GpuBuffer = HTMLCanvasElement | HTMLImageElement | ImageBitmap;
 
 /**
  * Possible results from Pose.
@@ -160,7 +163,7 @@ export interface Results {
  */
 export interface Options {
   selfieMode?: boolean;
-  modelComplexity?: 0|1|2;
+  modelComplexity?: 0 | 1 | 2;
   smoothLandmarks?: boolean;
   enableSegmentation?: boolean;
   smoothSegmentation?: boolean;
@@ -171,7 +174,7 @@ export interface Options {
 /**
  * Listener for any results from Pose.
  */
-export type ResultsListener = (results: Results) => (Promise<void>|void);
+export type ResultsListener = (results: Results) => Promise<void> | void;
 
 /**
  * Contains all of the setup options to drive the pose solution.

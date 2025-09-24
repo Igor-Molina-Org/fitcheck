@@ -60,24 +60,27 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
     }
   };
 
-  function calculateAngle(a: poseDetection.Keypoint, b: poseDetection.Keypoint, c: poseDetection.Keypoint): number {
-  //Getting Line from points
-  const ab = { x: a.x - b.x, y: a.y - b.y };
-  const cb = { x: c.x - b.x, y: c.y - b.y };
+  function calculateAngle(
+    a: poseDetection.Keypoint,
+    b: poseDetection.Keypoint,
+    c: poseDetection.Keypoint
+  ): number {
+    //Getting Line from points
+    const ab = { x: a.x - b.x, y: a.y - b.y };
+    const cb = { x: c.x - b.x, y: c.y - b.y };
 
-  //Dot Product from lines
-  const dot = ab.x * cb.x + ab.y * cb.y;
+    //Dot Product from lines
+    const dot = ab.x * cb.x + ab.y * cb.y;
 
-  //Getting line length
-  const lengthAB = Math.sqrt(ab.x ** 2 + ab.y ** 2);
-  const lengthCB = Math.sqrt(cb.x ** 2 + cb.y ** 2);
+    //Getting line length
+    const lengthAB = Math.sqrt(ab.x ** 2 + ab.y ** 2);
+    const lengthCB = Math.sqrt(cb.x ** 2 + cb.y ** 2);
 
-  const cosineAngle = dot / (lengthAB * lengthCB);
-  let angle = Math.acos(cosineAngle) * (180 / Math.PI);
+    const cosineAngle = dot / (lengthAB * lengthCB);
+    const angle = Math.acos(cosineAngle) * (180 / Math.PI);
 
-  return angle;
+    return angle;
   }
-
 
   const detectPose = async () => {
     const detector = detectorRef.current;
@@ -123,24 +126,24 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
     const pointRadius = 4;
     const correctColor = "lime";
     const wrongColor = "red";
-    
+
     const incorrectSegments = new Set<string>();
 
-    if(exerciseInfo.angleChecks){
+    if (exerciseInfo.angleChecks) {
       exerciseInfo.angleChecks.forEach((check) => {
-      const [a, b, c] = check.points.map((pointName) => keypoints.find((kp) => kp.name === pointName));
-      
-      if (a && b && c) {
-        const angle = calculateAngle(a, b, c);
-        console.log(angle)
-        if (angle < check.minAngle || angle > check.maxAngle) {
-          check.points.forEach(p => incorrectSegments.add(p));
-          
+        const [a, b, c] = check.points.map((pointName) =>
+          keypoints.find((kp) => kp.name === pointName)
+        );
+
+        if (a && b && c) {
+          const angle = calculateAngle(a, b, c);
+          if (angle < check.minAngle || angle > check.maxAngle) {
+            check.points.forEach((p) => incorrectSegments.add(p));
+          }
         }
-      }
-    });
+      });
     }
-    
+
     // desenha linhas
     skeleton.forEach(([startName, endName]) => {
       const start = keypoints.find((kp) => kp.name === startName);
@@ -150,7 +153,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       if ((start.score ?? 0) < 0.5 || (end.score ?? 0) < 0.5) return;
 
       // Cor padrão
-      let color =
+      const color =
         incorrectSegments.has(endName) && incorrectSegments.has(startName)
           ? wrongColor
           : correctColor;
@@ -170,7 +173,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       if ((kp.score ?? 0) < 0.5) return;
 
       // Define a cor padrão
-      let color = incorrectSegments.has(kp.name) ? wrongColor : correctColor;
+      const color = incorrectSegments.has(kp.name) ? wrongColor : correctColor;
 
       // Desenha cada ponto separadamente
       ctx.beginPath();
@@ -202,35 +205,26 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
   }, []); // <- monta só uma vez
 
   return (
-  <>
-    <h2 style={{
-      marginTop: "10px",
-      margin: "0px",
-      width: "200px"
-     }}>
-      {exerciseInfo.description
-        ? exerciseInfo.description
-        : "No description available for this exercise"}
-    </h2>
+    <>
+      <h2 className={styles.exerciseDescription}>
+        {exerciseInfo.description
+          ? exerciseInfo.description
+          : "No description available for this exercise"}
+      </h2>
 
-    <div
-      className={styles.cameraContainer}
-    >
-      <canvas
-        ref={canvasRef}
-        className={styles.canvas}
-      />
+      <div className={styles.cameraContainer}>
+        <canvas ref={canvasRef} className={styles.canvas} />
 
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        playsInline
-        className={styles.video}
-      />
-    </div>
-  </>
-);
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          className={styles.video}
+        />
+      </div>
+    </>
+  );
 }
 
 export default ComputerVision;

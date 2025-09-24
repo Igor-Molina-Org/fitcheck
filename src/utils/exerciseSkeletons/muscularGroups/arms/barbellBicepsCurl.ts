@@ -30,6 +30,6 @@ export const barbellBicepsCurlInfo: ExerciseInfo = {
       points: ["left_shoulder", "left_hip", "left_knee"],
       minAngle: 175,
       maxAngle: 180,
-    }
-  ]
+    },
+  ],
 };
