@@ -1,4 +1,4 @@
-import { ExerciseInfo } from "../../../ExerciseInfo";
+import { ExerciseInfo } from "../../../exerciseInfo/ExerciseInfo";
 
 export const barbellBicepsCurlInfo: ExerciseInfo = {
   skeleton: [
@@ -18,6 +18,8 @@ export const barbellBicepsCurlInfo: ExerciseInfo = {
       points: ["left_shoulder", "left_elbow", "left_wrist"],
       minAngle: 45,
       maxAngle: 180,
+      minRange: 100,
+      repAngle: 65,
     },
     {
       name: "Shoulder Posture",

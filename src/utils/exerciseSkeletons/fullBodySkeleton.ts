@@ -1,4 +1,4 @@
-import { ExerciseInfo } from "../ExerciseInfo";
+import { ExerciseInfo } from "../exerciseInfo/ExerciseInfo";
 
 export const fullBodyInfo: ExerciseInfo = {
   skeleton: [

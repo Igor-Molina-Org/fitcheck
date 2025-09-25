@@ -25,8 +25,28 @@
   overflow: hidden;
 }
 
+.counter {
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  width: 100px;
+  height: 80px;
+  font-size: 80px;
+  text-align: center;
+  background-color: red;
+}
+
 .exerciseDescription {
   margin-top: 10px;
   margin: 0px;
   width: 200px;
 }
+
+/* TODO
+@media (max-width: 485px) {
+  .counter {
+    top: 50%;
+  }
+} */

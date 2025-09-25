@@ -1,7 +1,8 @@
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import * as tf from "@tensorflow/tfjs";
-import { useEffect, useRef } from "react";
-import { ExerciseInfo } from "../../utils/ExerciseInfo";
+import { useEffect, useRef, useState } from "react";
+import { ExerciseInfo } from "../../utils/exerciseInfo/ExerciseInfo";
+import useRepCounter from "../../utils/exerciseInfo/repCounter";
 import styles from "./styles.module.css";
 
 type ComputerVisionProps = {
@@ -12,6 +13,15 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const detectorRef = useRef<poseDetection.PoseDetector | null>(null);
+  const [counter, setCounter] = useState(0);
+  const exactAngleCheck = exerciseInfo.angleChecks.find(
+    (check) => check.minRange !== undefined && check.repAngle !== undefined
+  );
+
+  const countRep = useRepCounter(
+    exactAngleCheck!.minRange!,
+    exactAngleCheck!.repAngle!
+  );
 
   const setupCamera = async () => {
     if (!videoRef.current) throw new Error("Video element is not available.");
@@ -95,7 +105,6 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
         if (poses.length > 0) {
-          //Não captura o rosto
           const keypoints = poses[0].keypoints.filter((element, index) => {
             return index > 10;
           });
@@ -113,7 +122,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
     ctx: CanvasRenderingContext2D,
     skeleton: Array<[string, string]>
   ) => {
-    // Cria um Set com todos os keypoints usados no skeleton
+    //Generates a Set that contains every skeleton keypoint
     const keypointNames = new Set<string>();
     skeleton.forEach(([start, end]) => {
       keypointNames.add(start);
@@ -137,14 +146,20 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
 
         if (a && b && c) {
           const angle = calculateAngle(a, b, c);
+
           if (angle < check.minAngle || angle > check.maxAngle) {
             check.points.forEach((p) => incorrectSegments.add(p));
+          }
+          if (check.minRange && check.repAngle) {
+            if (countRep(angle)) {
+              setCounter((c) => c + 1);
+            }
           }
         }
       });
     }
 
-    // desenha linhas
+    //Draws Lines
     skeleton.forEach(([startName, endName]) => {
       const start = keypoints.find((kp) => kp.name === startName);
       const end = keypoints.find((kp) => kp.name === endName);
@@ -152,7 +167,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       if (!start || !end) return;
       if ((start.score ?? 0) < 0.5 || (end.score ?? 0) < 0.5) return;
 
-      // Cor padrão
+      //Default color
       const color =
         incorrectSegments.has(endName) && incorrectSegments.has(startName)
           ? wrongColor
@@ -166,16 +181,15 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       ctx.stroke();
     });
 
-    // desenha pontos
+    //Draws points
     keypoints.forEach((kp) => {
       if (!kp.name) return;
       if (!keypointNames.has(kp.name)) return;
       if ((kp.score ?? 0) < 0.5) return;
 
-      // Define a cor padrão
+      //Default color
       const color = incorrectSegments.has(kp.name) ? wrongColor : correctColor;
 
-      // Desenha cada ponto separadamente
       ctx.beginPath();
       ctx.arc(kp.x, kp.y, pointRadius, 0, 2 * Math.PI);
       ctx.fillStyle = color;
@@ -215,6 +229,8 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
 
       <div className={styles.cameraContainer}>
         <canvas ref={canvasRef} className={styles.canvas} />
+
+        <div className={styles.counter}>{counter}</div>
 
         <video
           ref={videoRef}
