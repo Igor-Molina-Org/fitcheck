@@ -131,32 +131,69 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
 
     ctx.save();
 
-    const lineWidth = 2;
-    const pointRadius = 4;
+    const lineWidth = 8;
+    const pointRadius = 8;
     const correctColor = "lime";
     const wrongColor = "red";
 
     const incorrectSegments = new Set<string>();
 
     if (exerciseInfo.angleChecks) {
+      //Validates every point
       exerciseInfo.angleChecks.forEach((check) => {
         const [a, b, c] = check.points.map((pointName) =>
           keypoints.find((kp) => kp.name === pointName)
         );
 
-        if (a && b && c) {
+        //Checks if those points exists, and if their score is good enough
+        if (
+          a &&
+          b &&
+          c &&
+          (a.score ?? 0) > 0.8 &&
+          (b.score ?? 0) > 0.8 &&
+          (c.score ?? 0) > 0.8
+        ) {
+          //Calculates de angle between those points
           const angle = calculateAngle(a, b, c);
 
+          //If the angle is wrong
           if (angle < check.minAngle || angle > check.maxAngle) {
+            //Add those points to incorrectSegment
             check.points.forEach((p) => incorrectSegments.add(p));
           }
-          if (check.minRange && check.repAngle) {
+        }
+      });
+
+      //Repetition counter
+      //repCheck is the main exercise angle and is checked separataly
+      const repCheck = exerciseInfo.angleChecks.find(
+        (c) => c.minRange && c.repAngle
+      );
+
+      if (repCheck) {
+        const [a, b, c] = repCheck.points.map((pointName) =>
+          keypoints.find((kp) => kp.name === pointName)
+        );
+
+        if (
+          a &&
+          b &&
+          c &&
+          (a.score ?? 0) > 0.8 &&
+          (b.score ?? 0) > 0.8 &&
+          (c.score ?? 0) > 0.8
+        ) {
+          const angle = calculateAngle(a, b, c);
+
+          //If there is any incorrect angle, the rep doesn't count
+          if (incorrectSegments.size === 0) {
             if (countRep(angle)) {
               setCounter((c) => c + 1);
             }
           }
         }
-      });
+      }
     }
 
     //Draws Lines
@@ -165,7 +202,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       const end = keypoints.find((kp) => kp.name === endName);
 
       if (!start || !end) return;
-      if ((start.score ?? 0) < 0.5 || (end.score ?? 0) < 0.5) return;
+      if ((start.score ?? 0) < 0.8 || (end.score ?? 0) < 0.8) return;
 
       //Default color
       const color =
@@ -185,7 +222,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
     keypoints.forEach((kp) => {
       if (!kp.name) return;
       if (!keypointNames.has(kp.name)) return;
-      if ((kp.score ?? 0) < 0.5) return;
+      if ((kp.score ?? 0) < 0.8) return;
 
       //Default color
       const color = incorrectSegments.has(kp.name) ? wrongColor : correctColor;
