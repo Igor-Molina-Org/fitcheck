@@ -1,6 +1,7 @@
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import * as tf from "@tensorflow/tfjs";
 import { useEffect, useRef, useState } from "react";
+import sideChooserImg from "../../assets/sideChooser.png";
 import { ExerciseInfo } from "../../utils/exerciseInfo/ExerciseInfo";
 import useRepCounter from "../../utils/exerciseInfo/repCounter";
 import styles from "./styles.module.css";
@@ -13,7 +14,20 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const detectorRef = useRef<poseDetection.PoseDetector | null>(null);
+
   const [counter, setCounter] = useState(0);
+  const [side, setSide] = useState<"left" | "right">("left");
+  // keeps the updated value of Side inside the loop
+  const sideRef = useRef<"left" | "right">(side);
+  useEffect(() => {
+    sideRef.current = side;
+  }, [side]);
+
+  function handleChangeSide() {
+    setCounter(0);
+    setSide(side === "left" ? "right" : "left");
+  }
+
   const exactAngleCheck = exerciseInfo.angleChecks.find(
     (check) => check.minRange !== undefined && check.repAngle !== undefined
   );
@@ -122,17 +136,18 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
     ctx: CanvasRenderingContext2D,
     skeleton: Array<[string, string]>
   ) => {
-    //Generates a Set that contains every skeleton keypoint
+    const currentSide = sideRef.current; //uses the updated value of side
+
     const keypointNames = new Set<string>();
     skeleton.forEach(([start, end]) => {
-      keypointNames.add(start);
-      keypointNames.add(end);
+      keypointNames.add(`${currentSide}_${start}`);
+      keypointNames.add(`${currentSide}_${end}`);
     });
 
     ctx.save();
 
-    const lineWidth = 8;
-    const pointRadius = 8;
+    const lineWidth = 4;
+    const pointRadius = 4;
     const correctColor = "lime";
     const wrongColor = "red";
 
@@ -142,7 +157,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       //Validates every point
       exerciseInfo.angleChecks.forEach((check) => {
         const [a, b, c] = check.points.map((pointName) =>
-          keypoints.find((kp) => kp.name === pointName)
+          keypoints.find((kp) => kp.name === `${currentSide}_${pointName}`)
         );
 
         //Checks if those points exists, and if their score is good enough
@@ -159,8 +174,9 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
 
           //If the angle is wrong
           if (angle < check.minAngle || angle > check.maxAngle) {
-            //Add those points to incorrectSegment
-            check.points.forEach((p) => incorrectSegments.add(p));
+            check.points.forEach((p) =>
+              incorrectSegments.add(`${currentSide}_${p}`)
+            );
           }
         }
       });
@@ -173,7 +189,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
 
       if (repCheck) {
         const [a, b, c] = repCheck.points.map((pointName) =>
-          keypoints.find((kp) => kp.name === pointName)
+          keypoints.find((kp) => kp.name === `${currentSide}_${pointName}`)
         );
 
         if (
@@ -198,15 +214,19 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
 
     //Draws Lines
     skeleton.forEach(([startName, endName]) => {
-      const start = keypoints.find((kp) => kp.name === startName);
-      const end = keypoints.find((kp) => kp.name === endName);
+      const start = keypoints.find(
+        (kp) => kp.name === `${currentSide}_${startName}`
+      );
+      const end = keypoints.find(
+        (kp) => kp.name === `${currentSide}_${endName}`
+      );
 
       if (!start || !end) return;
       if ((start.score ?? 0) < 0.8 || (end.score ?? 0) < 0.8) return;
 
-      //Default color
       const color =
-        incorrectSegments.has(endName) && incorrectSegments.has(startName)
+        incorrectSegments.has(`${currentSide}_${startName}`) &&
+        incorrectSegments.has(`${currentSide}_${endName}`)
           ? wrongColor
           : correctColor;
 
@@ -224,7 +244,6 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
       if (!keypointNames.has(kp.name)) return;
       if ((kp.score ?? 0) < 0.8) return;
 
-      //Default color
       const color = incorrectSegments.has(kp.name) ? wrongColor : correctColor;
 
       ctx.beginPath();
@@ -268,7 +287,28 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
         <canvas ref={canvasRef} className={styles.canvas} />
 
         <div className={styles.counter}>{counter}</div>
-
+        <div className={styles.sideButtonsContainer}>
+          <button
+            className={`${styles.sideChooserButton} ${styles.leftButton}`}
+            onClick={handleChangeSide}
+          >
+            <img
+              className={styles.sideChooserImg}
+              src={sideChooserImg}
+              alt="left"
+            />
+          </button>
+          <button
+            className={styles.sideChooserButton}
+            onClick={handleChangeSide}
+          >
+            <img
+              className={`${styles.sideChooserImg} ${styles.inverseImg}`}
+              src={sideChooserImg}
+              alt="right"
+            />
+          </button>
+        </div>
         <video
           ref={videoRef}
           autoPlay

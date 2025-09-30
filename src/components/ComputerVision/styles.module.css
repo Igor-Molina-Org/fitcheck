@@ -44,6 +44,40 @@
   width: 200px;
 }
 
+.sideButtonsContainer {
+  position: absolute;
+  top: 80%;
+  left: 40%;
+  z-index: 3;
+  display: flex;
+  gap: 80px;
+}
+
+.sideChooserButton {
+  width: 80px;
+  height: 80px;
+  padding: 0;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.sideChooserButton:hover {
+  border: 4px white solid;
+}
+
+.sideChooserImg {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+}
+
+.inverseImg {
+  transform: scaleX(-1);
+}
+
 /* TODO
 @media (max-width: 485px) {
   .counter {

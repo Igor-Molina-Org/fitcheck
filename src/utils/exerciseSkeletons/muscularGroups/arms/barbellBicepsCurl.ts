@@ -3,19 +3,19 @@ import { ExerciseInfo } from "../../../exerciseInfo/ExerciseInfo";
 export const barbellBicepsCurlInfo: ExerciseInfo = {
   skeleton: [
     // upper body
-    ["left_shoulder", "left_elbow"],
-    ["left_elbow", "left_wrist"],
-    ["left_shoulder", "left_hip"],
+    ["shoulder", "elbow"],
+    ["elbow", "wrist"],
+    ["shoulder", "hip"],
 
     // legs
-    ["left_hip", "left_knee"],
-    ["left_knee", "left_ankle"],
+    ["hip", "knee"],
+    ["knee", "ankle"],
   ],
   description: "Barbell biceps tracking",
   angleChecks: [
     {
       name: "Elbow Flexion",
-      points: ["left_shoulder", "left_elbow", "left_wrist"],
+      points: ["shoulder", "elbow", "wrist"],
       minAngle: 45,
       maxAngle: 180,
       minRange: 100,
@@ -23,13 +23,13 @@ export const barbellBicepsCurlInfo: ExerciseInfo = {
     },
     {
       name: "Shoulder Posture",
-      points: ["left_hip", "left_shoulder", "left_elbow"],
+      points: ["hip", "shoulder", "elbow"],
       minAngle: 0,
       maxAngle: 10,
     },
     {
       name: "Back Posture",
-      points: ["left_shoulder", "left_hip", "left_knee"],
+      points: ["shoulder", "hip", "knee"],
       minAngle: 175,
       maxAngle: 180,
     },
