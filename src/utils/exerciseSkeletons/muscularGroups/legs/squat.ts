@@ -1,6 +1,13 @@
 import { ExerciseInfo } from "../../../exerciseInfo/ExerciseInfo";
 
 export const squatInfo: ExerciseInfo = {
+  information: {
+    exerciseName: "Squats",
+    exerciseDescription: "Exercise for leg strength",
+    musclesActiveImgUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWtS0dPK2HZ259E9i7XS-CuJajWPZQHcjO5Q&s",
+    trainingExVidUrl: "https://www.youtube.com/embed/xqvCmoLULNY",
+  },
   skeleton: [
     // upper body
     ["shoulder", "hip"],
@@ -14,7 +21,6 @@ export const squatInfo: ExerciseInfo = {
     ["heel", "ankle"],
     ["ankle", "foot_index"],
   ],
-  description: "squat tracking",
   angleChecks: [
     {
       name: "Knee Flexion",

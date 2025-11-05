@@ -29,11 +29,10 @@
   position: absolute;
   top: 10%;
   left: 15%;
-  transform: translate(-50%, -50%);
   z-index: 3;
-  width: 100px;
-  height: 80px;
-  font-size: 80px;
+  width: clamp(40px, 8vw, 80px);
+  height: clamp(40px, 8vw, 80px);
+  font-size: clamp(40px, 8vw, 80px);
   text-align: center;
   background-color: red;
 }
@@ -47,7 +46,8 @@
 .sideButtonsContainer {
   position: absolute;
   top: 80%;
-  left: 40%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3;
   display: flex;
   gap: 80px;
@@ -76,6 +76,31 @@
 
 .inverseImg {
   transform: scaleX(-1);
+}
+
+.infoButtonContainer {
+  position: absolute;
+  background: none;
+  top: 10%;
+  left: 80%;
+  z-index: 3;
+}
+
+.infoButton {
+  all: unset;
+  width: clamp(40px, 8vw, 80px);
+  height: clamp(40px, 8vw, 80px);
+}
+
+.infoButton:hover {
+  outline: 4px solid white;
+  border-radius: 50%;
+}
+
+.infoButtonImg {
+  width: 100%;
+  height: 100%;
+  filter: invert(1);
 }
 
 /* TODO

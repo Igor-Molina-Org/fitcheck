@@ -1,9 +1,11 @@
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import * as tf from "@tensorflow/tfjs";
 import { useEffect, useRef, useState } from "react";
+import infoButtonImg from "../../assets/infoButton.png";
 import sideChooserImg from "../../assets/sideChooser.png";
 import { ExerciseInfo } from "../../utils/exerciseInfo/ExerciseInfo";
 import useRepCounter from "../../utils/exerciseInfo/repCounter";
+import ExtraInfo from "../ExtraInfo";
 import styles from "./styles.module.css";
 
 type ComputerVisionProps = {
@@ -15,6 +17,7 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const detectorRef = useRef<poseDetection.PoseDetector | null>(null);
 
+  const [showExtraInformation, setShowExtraInformation] = useState(false);
   const [counter, setCounter] = useState(0);
   const [side, setSide] = useState<"left" | "right">("left");
   // keeps the updated value of Side inside the loop
@@ -278,8 +281,8 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
   return (
     <>
       <h2 className={styles.exerciseDescription}>
-        {exerciseInfo.description
-          ? exerciseInfo.description
+        {exerciseInfo.information.exerciseDescription
+          ? exerciseInfo.information.exerciseDescription
           : "No description available for this exercise"}
       </h2>
 
@@ -287,6 +290,27 @@ function ComputerVision({ exerciseInfo }: ComputerVisionProps) {
         <canvas ref={canvasRef} className={styles.canvas} />
 
         <div className={styles.counter}>{counter}</div>
+
+        <div className={styles.infoButtonContainer}>
+          <button
+            className={styles.infoButton}
+            onClick={() => setShowExtraInformation(true)}
+          >
+            <img
+              className={styles.infoButtonImg}
+              src={infoButtonImg}
+              alt="info"
+            />
+          </button>
+        </div>
+
+        {showExtraInformation && (
+          <ExtraInfo
+            exerciseInfo={exerciseInfo}
+            onClose={() => setShowExtraInformation(false)}
+          />
+        )}
+
         <div className={styles.sideButtonsContainer}>
           <button
             className={`${styles.sideChooserButton} ${styles.leftButton}`}
