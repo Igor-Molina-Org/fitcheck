@@ -39,5 +39,12 @@ Se tudo der certo, aparecerá algo assim no terminal:
 Acesse o seu navegador e entre no endereço mostrado, neste caso: http://localhost:5173/
 Ou segure CTRL e clique no link, já deve abrir no site direto
 
+###Licenças de Terceiros
 
+Este projeto utiliza bibliotecas sob a licença Apache 2.0:
+
+- [TensorFlow.js](https://github.com/tensorflow/tfjs) © Google – Licença Apache 2.0  
+- [MediaPipe BlazePose](https://github.com/google/mediapipe) © Google – Licença Apache 2.0  
+
+O uso dessas tecnologias segue os termos da [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
   
