@@ -1,69 +1,43 @@
-# React + TypeScript + Vite
+# FitCheck
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O **FitCheck** é um aplicativo web que utiliza **Inteligência Artificial com reconhecimento de pose** para ajudar você a realizar exercícios físicos com a postura correta.  
+Este repositório contém o código do projeto desenvolvido com **Vite + React + TypeScript**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Como rodar o projeto localmente
 
-## Expanding the ESLint configuration
+Siga os passos abaixo 
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Antes de começar, você precisa ter instalado no seu computador:
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- [Node.js](https://nodejs.org/) (versão **16 ou superior**)  
+- [Git](https://git-scm.com/)
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Para conferir se estão instalados:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+node -v
+git --version
 ```
+Abra o terminal (ou PowerShell / Git Bash) e execute:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+git clone https://github.com/SEU-USUARIO/fitcheck.git
+cd fitcheck
+npm install
+npm run dev
+```
+Se tudo der certo, aparecerá algo assim no terminal:
+```
+  VITE v7.1.5  ready in 500ms
+
+  ➜  Local:   http://localhost:5173/
+
+```
+Acesse o seu navegador e entre no endereço mostrado, neste caso: http://localhost:5173/
+Ou segure CTRL e clique no link, já deve abrir no site direto
+
+
+  
