@@ -39,7 +39,7 @@ Se tudo der certo, aparecerá algo assim no terminal:
 Acesse o seu navegador e entre no endereço mostrado, neste caso: http://localhost:5173/
 Ou segure CTRL e clique no link, já deve abrir no site direto
 
-###Licenças de Terceiros
+### Licenças de Terceiros
 
 Este projeto utiliza bibliotecas sob a licença Apache 2.0:
 
